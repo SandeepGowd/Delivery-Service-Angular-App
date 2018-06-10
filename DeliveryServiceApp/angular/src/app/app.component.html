@@ -1,0 +1,84 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-lg-8">{{savedStatus}}</div>
+  </div>
+  <form #appForm="ngForm">
+    <fieldset>
+      <legend>Delivery Service:</legend>
+      <div [hidden]="appForm.submitted">
+
+        <div class="form-group">
+          <label for="txtAddress">Delivery Address:</label>
+          <input id="txtAddress" name="txtAddress" class="form-control bootmap"
+                 required [(ngModel)]="orderDetails.orderBy" #txtAddress="ngModel">
+          <div *ngIf="txtAddress.invalid && (txtAddress.dirty || txtAddress.touched)"
+               class="alert alert-danger bootmap">
+            <div *ngIf="txtAddress.errors.required">
+              Delivery address is required.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="txtDistance">Distance:</label>
+          <input id="txtDistance" type="number" name="txtDistance" class="form-control bootmap"
+                 min="0" max="180" required [(ngModel)]="orderDetails.distance" #txtDistance="ngModel" (change)="getDistanceCost()">
+          <div *ngIf="txtDistance.invalid && (txtDistance.dirty || txtDistance.touched)"
+               class="alert alert-danger bootmap">
+            <div *ngIf="txtDistance.errors.required">
+              Distance Value is required.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="chkStair">Stair:</label>
+          <input id="chkStair" type="checkbox" class="chk-padding" name="chkStair" [(ngModel)]="isStairEnabled">
+        </div>
+        <div class="form-group" *ngIf="isStairEnabled==true">
+          <label for="txtStairNo">Stair No:</label>
+          <input id="txtStairNo" name="txtStairNo" type="number" class="form-control bootmap"
+                 min="0" max="11" required [(ngModel)]="orderDetails.stair" #txtDistance="ngModel" (change)="getStairCost(orderDetails.stair)">
+          <div *ngIf="isStairEnabled==true && txtDistance.invalid && (txtDistance.dirty || txtDistance.touched)"
+               class="alert alert-danger bootmap">
+            <div *ngIf="txtDistance.errors.required">
+              Stair No Value is required.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="chkCustType">New Customer:</label>
+          <input id="chkCustType" type="checkbox" class="chk-padding" name="chkCustType" [(ngModel)]="isNewCustomer" (change)="getCustomerTypeCost(isNewCustomer)">
+
+
+        </div>
+        <div class="form-group">
+          <label for="chkWeekend">Weekend Delivery:</label>
+          <input id="chkWeekend" type="checkbox" class="chk-padding" name="chkWeekend" [(ngModel)]="isWeekendEnabled" (change)="getWeekendCost(isWeekendEnabled)">
+        </div>
+        <div class="form-group">
+          <label for="txtCoupon">Coupon:</label>
+          <input type="text" id="txtCoupon" name="txtCoupon" class="form-control bootmap" [(ngModel)]="orderDetails.coupon" (change)="getCouponOfferCost(orderDetails.coupon)">
+        </div>
+
+        <div class="form-group">
+          <label>Total Order Cost:</label> &nbsp; &nbsp;
+          <span>{{orderDetails.orderCost}}</span>
+        </div>
+        <button type="button" class="btn btn-default" id="btnCalculate" [disabled]="appForm.invalid||submitted" (click)="calculateTotalCost()"> Calculate Cost</button>
+
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default btn-padding"
+                [disabled]="appForm.invalid||submitted" (click)="onSubmit()">
+          Submit
+        </button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default btn-padding" [disabled]="appForm.invalid" (click)="addNewOrder()">
+          Add new order details
+        </button>
+      </div>
+
+      </fieldset>
+
+  </form>
+
+</div>
